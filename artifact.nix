@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   src = bindistTarballs.${stdenv.targetPlatform.system};
 
   nativeBuildInputs = [ perl ];
+  propagatedBuildInputs = [ stdenv.cc ];
   buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
