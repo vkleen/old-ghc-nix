@@ -1,12 +1,15 @@
-{ stdenv, lib, patchelfUnstable
-, perl, gcc, llvm_39
+{ stdenv, lib
+, perl, gcc
 , ncurses6, ncurses5, gmp, glibc, libiconv
+, llvmPackages
 }: { bindistTarballs, ncursesVersion, key, bindistVersion }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
+  useLLVM = !stdenv.targetPlatform.isx86;
+
   libPath = stdenv.lib.makeLibraryPath ([
     selectedNcurses gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
@@ -63,8 +66,7 @@ stdenv.mkDerivation rec {
   src = bindistTarballs.${stdenv.targetPlatform.system};
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = [ stdenv.cc ];
-  buildInputs = stdenv.lib.optionals (stdenv.targetPlatform.isAarch32 || stdenv.targetPlatform.isAarch64) [ llvm_39 ];
+  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -112,7 +114,7 @@ stdenv.mkDerivation rec {
     # Rename needed libraries and binaries, fix interpreter
     # N.B. Use patchelfUnstable due to https://github.com/NixOS/patchelf/pull/85
     stdenv.lib.optionalString stdenv.isLinux ''
-      find . -type f -perm -0100 -exec ${patchelfUnstable}/bin/patchelf \
+      find . -type f -perm -0100 -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.${ncursesVersion} libncurses.so \
           --replace-needed libtinfo.so.${ncursesVersion} libncurses.so.${ncursesVersion} \
           --interpreter ${glibcDynLinker} {} \;
@@ -158,10 +160,6 @@ stdenv.mkDerivation rec {
 
     for file in $(find "$out" -name setup-config); do
       substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
-    done
-  '' + ''
-    for file in $(find "$out" -name settings); do
-      substituteInPlace $file --replace '("ranlib command", "")' '("ranlib command", "ranlib")'
     done
   '';
 

@@ -1,15 +1,3 @@
 [
-   { "version": "8.6.5", "bindists": ["apple-darwin", "fedora27-linux"] }
-  ,{ "version": "8.6.4", "bindists": ["apple-darwin", "fedora27-linux"] }
-  ,{ "version": "8.6.3", "bindists": ["apple-darwin", "fedora27-linux"] }
-  ,{ "version": "8.6.2", "bindists": ["apple-darwin", "fedora27-linux"] }
-  ,{ "version": "8.6.1", "bindists": ["apple-darwin", "fedora27-linux"] }
-  ,{ "version": "8.4.4", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.4.3", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.4.2", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.4.1", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.2.2", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.2.1", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.0.2", "bindists": ["apple-darwin", "deb8-linux" ] }
-  ,{ "version": "8.0.1", "bindists": ["apple-darwin", "deb8-linux" ] }
+   { "version": "8.6.5", "bindists": ["fedora29-linux"] }
 ]
